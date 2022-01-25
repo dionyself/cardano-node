@@ -1,13 +1,13 @@
-{-# LANGUAGE BangPatterns        #-}
-{-# LANGUAGE CPP                 #-}
-{-# LANGUAGE DataKinds           #-}
-{-# LANGUAGE FlexibleContexts    #-}
-{-# LANGUAGE GADTs               #-}
-{-# LANGUAGE NamedFieldPuns      #-}
-{-# LANGUAGE PackageImports      #-}
+{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE PackageImports #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TupleSections       #-}
-{-# LANGUAGE TypeApplications    #-}
+{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TypeApplications #-}
 
 #if !defined(mingw32_HOST_OS)
 #define UNIX
@@ -19,8 +19,8 @@ module Cardano.Node.Run
   ) where
 
 import           Cardano.Prelude hiding (ByteString, STM, atomically, take, trace)
-import           Prelude (String, error, id)
 import           Data.IP (toSockAddr)
+import           Prelude (String, error, id)
 
 import qualified Control.Concurrent.Async as Async
 import           Control.Monad.Class.MonadSTM.Strict
@@ -34,8 +34,7 @@ import           Data.Time.Clock (getCurrentTime)
 import           Data.Version (showVersion)
 import           Network.HostName (getHostName)
 import           Network.Socket (Socket)
-import           System.Directory (canonicalizePath, createDirectoryIfMissing,
-                     makeAbsolute)
+import           System.Directory (canonicalizePath, createDirectoryIfMissing, makeAbsolute)
 import           System.Environment (lookupEnv)
 
 #ifdef UNIX
@@ -55,19 +54,18 @@ import qualified Cardano.Crypto.Libsodium as Crypto
 
 import           Cardano.Node.Configuration.Logging (LoggingLayer (..), createLoggingLayer,
                    shutdownLoggingLayer)
+import           Cardano.Node.Configuration.NodeAddress
 import           Cardano.Node.Configuration.POM (NodeConfiguration (..),
                    PartialNodeConfiguration (..), SomeNetworkP2PMode (..),
                    defaultPartialNodeConfiguration, makeNodeConfiguration, parseNodeConfigurationFP)
-import           Cardano.Node.Configuration.NodeAddress
 import           Cardano.Node.Startup
-import           Cardano.Node.Types
 import           Cardano.Node.Tracing.API
 import           Cardano.Node.Tracing.Tracers.Startup (getStartupInfo)
+import           Cardano.Node.Types
 import           Cardano.Tracing.Config (TraceOptions (..), TraceSelection (..))
 
 import qualified Ouroboros.Consensus.Config as Consensus
-import           Ouroboros.Consensus.Config.SupportsNode
-                     (ConfigSupportsNode (..))
+import           Ouroboros.Consensus.Config.SupportsNode (ConfigSupportsNode (..))
 import           Ouroboros.Consensus.Node (NetworkP2PMode (..), RunNode, RunNodeArgs (..),
                    StdRunNodeArgs (..))
 import qualified Ouroboros.Consensus.Node as Node (getChainDB, run)
@@ -96,8 +94,8 @@ import qualified Cardano.Node.Configuration.TopologyP2P as TopologyP2P
 import           Cardano.Node.Handlers.Shutdown
 import           Cardano.Node.Protocol (mkConsensusProtocol)
 import           Cardano.Node.Protocol.Types
-import           Cardano.Node.TraceConstraints (TraceConstraints)
 import           Cardano.Node.Queries
+import           Cardano.Node.TraceConstraints (TraceConstraints)
 import           Cardano.Tracing.Peer
 import           Cardano.Tracing.Tracers
 
@@ -127,7 +125,11 @@ runNode cmdPc = do
                            pure ()
       Nothing -> pure ()
 
-    eitherSomeProtocol <- runExceptT $ mkConsensusProtocol nc
+    eitherSomeProtocol <- runExceptT $ mkConsensusProtocol
+                                         (ncProtocolConfig nc)
+                                         -- TODO: Convert ncProtocolFiles to Maybe as relay nodes
+                                         -- don't need these.
+                                         (Just $ ncProtocolFiles nc)
 
     p :: SomeConsensusProtocol <-
       case eitherSomeProtocol of

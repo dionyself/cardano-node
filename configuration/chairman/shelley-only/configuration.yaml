@@ -6,7 +6,8 @@
 
 ##### Locations #####
 
-GenesisFile: genesis.json
+ByronGenesisFile: byron/genesis.json
+ShelleyGenesisFile: genesis.json
 SocketPath: db/node.socket
 
 ##### Blockfetch Protocol

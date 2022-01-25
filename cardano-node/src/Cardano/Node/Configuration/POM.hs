@@ -305,7 +305,8 @@ instance FromJSON PartialNodeConfiguration where
                     "Invalid value for 'MempoolCapacityBytesOverride'.  \
                     \Expecting byte count or NoOverride.  Value was: " <> show invalid
               Nothing -> return Nothing
-
+      --TODO: Left off here. Don't change any of this. Instead we can
+      -- simply create a new function to parse the config file to get the protocol
       parseByronProtocol v = do
         primary   <- v .:? "ByronGenesisFile"
         secondary <- v .:? "GenesisFile"
@@ -450,7 +451,7 @@ makeNodeConfiguration pnc = do
   configFile <- lastToEither "Missing YAML config file" $ pncConfigFile pnc
   topologyFile <- lastToEither "Missing TopologyFile" $ pncTopologyFile pnc
   databaseFile <- lastToEither "Missing DatabaseFile" $ pncDatabaseFile pnc
-  protocolFiles <- lastToEither "Missing ProtocolFiles" $ pncProtocolFiles pnc
+  -- protocolFiles <- lastToEither "Missing ProtocolFiles" $ pncProtocolFiles pnc
   validateDB <- lastToEither "Missing ValidateDB" $ pncValidateDB pnc
   protocolConfig <- lastToEither "Missing ProtocolConfig" $ pncProtocolConfig pnc
   loggingSwitch <- lastToEither "Missing LoggingSwitch" $ pncLoggingSwitch pnc
@@ -493,7 +494,9 @@ makeNodeConfiguration pnc = do
              { ncConfigFile = configFile
              , ncTopologyFile = topologyFile
              , ncDatabaseFile = databaseFile
-             , ncProtocolFiles = protocolFiles
+             , ncProtocolFiles = case getLast $ pncProtocolFiles pnc of
+                                   Just pFiles -> pFiles
+                                   Nothing -> ProtocolFilepaths Nothing Nothing Nothing Nothing Nothing Nothing
              , ncValidateDB = validateDB
              , ncShutdownConfig = shutdownConfig
              , ncProtocolConfig = protocolConfig

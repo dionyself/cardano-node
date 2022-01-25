@@ -140,6 +140,7 @@ module Cardano.Api (
     -- ** Blocks in the context of an era
     Block(Block),
     BlockHeader(..),
+    getBlockHeader,
 
     -- ** Points on the chain
     ChainPoint(..),
@@ -149,6 +150,10 @@ module Cardano.Api (
     ChainTip(..),
     BlockNo(..),
     chainTipToChainPoint,
+    fromConsensusTip,
+    fromConsensusPointInMode,
+    toConsensusPointInMode,
+    toConsensusPointHF,
 
     -- * Building transactions
 
@@ -525,14 +530,18 @@ module Cardano.Api (
     LocalNodeConnectInfo(..),
     AnyConsensusMode(..),
     renderMode,
-    ConsensusMode(CardanoMode),
+    ConsensusMode(..),
     consensusModeOnly,
     ConsensusModeIsMultiEra(..),
     AnyConsensusModeParams(..),
     ConsensusModeParams(..),
+    ConsensusBlockForMode,
+    ConsensusBlockForEra,
     EraInMode(..),
     toEraInMode,
     LocalNodeClientProtocols(..),
+    LocalNodeClientParams(..),
+    mkLocalNodeClientParams,
     LocalChainSyncClient(..),
     CardanoMode,
 --  connectToRemoteNode,
@@ -543,6 +552,8 @@ module Cardano.Api (
     ChainSyncClient(..),
     ChainSyncClientPipelined(..),
     BlockInMode(..),
+    fromConsensusBlock,
+    toConsensusBlock,
     LocalNodeClientProtocolsInMode,
 
     -- *** Local tx submission
@@ -609,6 +620,7 @@ module Cardano.Api (
     fromLedgerPParams,
     toCtxUTxOTxOut,
     --TODO: arrange not to export these
+    fromNetworkMagic,
     toNetworkMagic,
     fromLedgerTxOuts,
     toLedgerUTxO,
@@ -654,6 +666,7 @@ import           Cardano.Api.LedgerState
 import           Cardano.Api.Modes
 import           Cardano.Api.NetworkId
 import           Cardano.Api.OperationalCertificate
+import           Cardano.Api.Protocol.Types
 import           Cardano.Api.ProtocolParameters
 import           Cardano.Api.Query hiding (LedgerState (..))
 import           Cardano.Api.Script
@@ -670,5 +683,3 @@ import           Cardano.Api.TxMetadata
 import           Cardano.Api.Utils
 import           Cardano.Api.Value
 import           Cardano.Api.ValueParser
---TODO: Remove after updating cardano-node-chairman with new IPC
-import           Cardano.Api.Protocol.Types

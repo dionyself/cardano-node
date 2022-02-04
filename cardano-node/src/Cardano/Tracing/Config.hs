@@ -54,23 +54,13 @@ instance Semigroup PartialTraceOptions where
 
   tracingA <> tracingB =
     case (tracingA, tracingB) of
-      (PartialTracingOff, PartialTracingOff) -> PartialTracingOff
-
       (PartialTracingOnLegacy ptsA, PartialTracingOnLegacy ptsB) ->
         PartialTracingOnLegacy (ptsA <> ptsB)
 
       (PartialTraceDispatcher ptsA, PartialTraceDispatcher ptsB) ->
         PartialTraceDispatcher (ptsA <> ptsB)
 
-      (_ , PartialTracingOff) -> PartialTracingOff
-
-      (PartialTracingOff, tracing) -> tracing
-
-      (PartialTracingOnLegacy _, PartialTraceDispatcher pts) ->
-        PartialTraceDispatcher pts
-
-      (PartialTraceDispatcher _, PartialTracingOnLegacy pts) ->
-        PartialTracingOnLegacy pts
+      (_, tracing) -> tracing
 
 type TraceAcceptPolicy = ("TraceAcceptPolicy" :: Symbol)
 type TraceBlockchainTime = ("TraceBlockchainTime" :: Symbol)
@@ -338,7 +328,7 @@ defaultPartialTraceConfiguration =
     , pTraceChainSyncClient = pure $ OnOff True
     , pTraceChainSyncHeaderServer = pure $ OnOff False
     , pTraceChainSyncProtocol = pure $ OnOff False
-    , pTraceConnectionManager = pure $ OnOff False
+    , pTraceConnectionManager = pure $ OnOff True
     , pTraceConnectionManagerCounters = pure $ OnOff True
     , pTraceConnectionManagerTransitions = pure $ OnOff False
     , pTraceDebugPeerSelectionInitiatorTracer = pure $ OnOff False
@@ -350,7 +340,7 @@ defaultPartialTraceConfiguration =
     , pTraceForge = pure $ OnOff True
     , pTraceForgeStateInfo = pure $ OnOff True
     , pTraceHandshake = pure $ OnOff False
-    , pTraceInboundGovernor = pure $ OnOff False
+    , pTraceInboundGovernor = pure $ OnOff True
     , pTraceInboundGovernorCounters = pure $ OnOff True
     , pTraceInboundGovernorTransitions = pure $ OnOff True
     , pTraceIpSubscription = pure $ OnOff True
@@ -370,9 +360,9 @@ defaultPartialTraceConfiguration =
     , pTraceLocalTxSubmissionServer = pure $ OnOff False
     , pTraceMempool = pure $ OnOff True
     , pTraceMux = pure $ OnOff True
-    , pTracePeerSelection = pure $ OnOff False
+    , pTracePeerSelection = pure $ OnOff True
     , pTracePeerSelectionCounters = pure $ OnOff True
-    , pTracePeerSelectionActions = pure $ OnOff False
+    , pTracePeerSelectionActions = pure $ OnOff True
     , pTracePublicRootPeers = pure $ OnOff False
     , pTraceServer = pure $ OnOff False
     , pTraceTxInbound = pure $ OnOff False

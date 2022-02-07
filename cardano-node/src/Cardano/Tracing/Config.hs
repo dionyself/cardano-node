@@ -1,8 +1,8 @@
-{-# LANGUAGE DataKinds         #-}
-{-# LANGUAGE KindSignatures      #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE KindSignatures #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeApplications    #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Cardano.Tracing.Config
   ( TraceOptions (..)

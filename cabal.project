@@ -19,6 +19,8 @@ packages:
     trace-resources
     trace-forward
 
+optimization: 2
+
 package cardano-api
   ghc-options: -Werror
 

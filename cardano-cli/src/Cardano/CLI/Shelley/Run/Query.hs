@@ -429,7 +429,7 @@ runQueryKesPeriodInfo (AnyConsensusModeParams cModeParams) network nodeOpCertFil
       ptclState <- executeQuery era cModeParams localNodeConnInfo ptclStateQinMode
       (opCertCounter, ptclStateCounter, opCertCounterStateDiag) <- opCertCounterStateCheck ptclState opCert
 
-      let diagnoses = opCertCounterStateDiag ++  [periodCheckDiag]
+      let diagnoses = opCertCounterStateDiag ++ [periodCheckDiag]
 
       if any anyFailureDiagnostic diagnoses
       then
@@ -644,6 +644,7 @@ data KesOpCertDiagnostic = SuccessDiagnostic SuccessDiagnostic
 anyFailureDiagnostic :: KesOpCertDiagnostic -> Bool
 anyFailureDiagnostic FailureDiagnostic{} = True
 anyFailureDiagnostic SuccessDiagnostic{} = False
+
 data SuccessDiagnostic
   = OpCertCounterMatchesNodeState
   | OpCertCurrentKesPeriodWithinInterval

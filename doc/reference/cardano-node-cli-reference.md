@@ -77,6 +77,7 @@ The `query` command contains the following sub commands:
 * `stake-snapshot` (advanced): gets the stake snapshot information for a stake pool
 * `pool-params` (advanced): gets the current and future parameters for a stake pool
 * `leadership-schedule`: gets the slots the node is slot leader in for the current epoch
+* `kes-period-info` (advanced): returns diagnostic information pertaining to your operational certificate
 
 *cardano-cli governance*
 The `governance` command contains the following sub commands:
@@ -100,3 +101,29 @@ The `genesis` command contains the following sub commands:
 *cardano-cli text-view*
 The `text-view` command contains the following sub command:
 * `decode-cbor`: prints a text view file, as decoded CBOR.
+
+
+
+## Advanced Commands
+
+`kes-period-info`: This command runs the following checks on your operational certificate and your operational certificate issue counter:
+- Do the counters of the issue counter and operational certificate match?
+- Do the counters match what is currently in the node state?
+- Does the KES key period specified in your operational certificate fall within the current KES key period?
+We essentially check the predicates of the OCERT rule in the cardano-ledger specification and we print additional diagnostic information as follows:
+```
+✓ The counters match what is in the node's protocol state
+✓ The counters in the operational certificate and operational certificate issue counter file are the same
+✓ Operational certificate's kes period is within the correct KES period interval
+{
+    "qKesNodeStateOperationalCertificateNumber": 6,
+    "qKesCurrentKesPeriod": 404,
+    "qKesOnDiskOperationalCertificateNumber": 6,
+    "qKesRemainingSlotsInKesPeriod": 3760228,
+    "qKesMaxKESEvolutions": 62,
+    "qKesKesKeyExpiry": "2022-03-20T21:44:51Z",
+    "qKesEndKesInterval": 434,
+    "qKesStartKesInterval": 372,
+    "qKesSlotsPerKesPeriod": 129600
+}
+```

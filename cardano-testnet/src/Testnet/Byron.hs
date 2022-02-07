@@ -236,7 +236,7 @@ testnet testnetOptions H.Conf {..} = do
     si <- H.noteShow $ show @Int i
     sprocket <- H.noteShow $ Sprocket tempBaseAbsPath (socketDir </> "node-" <> si)
     _spocketSystemNameFile <- H.noteShow $ IO.sprocketSystemName sprocket
-    H.trueByDeadlineM deadline $ H.doesSprocketExist sprocket
+    H.byDeadlineM 10 deadline $ H.assertM $ H.doesSprocketExist sprocket
 
   forM_ nodeIndexes $ \i -> do
     si <- H.noteShow $ show @Int i

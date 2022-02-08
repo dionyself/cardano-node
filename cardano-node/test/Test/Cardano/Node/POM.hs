@@ -13,7 +13,8 @@ import           Cardano.Node.Configuration.POM
 import           Cardano.Node.Configuration.Socket
 import           Cardano.Node.Handlers.Shutdown
 import           Cardano.Node.Types
-import           Cardano.Tracing.Config (PartialTraceOptions (..), TraceOptions (..))
+import           Cardano.Tracing.Config (PartialTraceOptions (..), TraceOptions (..),
+                   defaultPartialTraceConfiguration)
 import qualified Ouroboros.Consensus.Node as Consensus (NetworkP2PMode (..))
 import           Ouroboros.Consensus.Storage.LedgerDB.DiskPolicy (SnapshotInterval (..))
 import           Ouroboros.Network.Block (MaxSlotNo (..), SlotNo (..))
@@ -59,7 +60,7 @@ testPartialYamlConfig =
     , pncMaxConcurrencyDeadline = Last Nothing
     , pncLoggingSwitch = Last $ Just True
     , pncLogMetrics = Last $ Just True
-    , pncTraceConfig = PartialTracingOff
+    , pncTraceConfig = Last (Just $ PartialTracingOnLegacy defaultPartialTraceConfiguration)
     , pncConfigFile = mempty
     , pncTopologyFile = mempty
     , pncDatabaseFile = mempty
@@ -96,7 +97,7 @@ testPartialCliConfig =
     , pncMaxConcurrencyDeadline = mempty
     , pncLoggingSwitch = mempty
     , pncLogMetrics = mempty
-    , pncTraceConfig = PartialTracingOff
+    , pncTraceConfig = Last (Just $ PartialTracingOnLegacy defaultPartialTraceConfiguration)
     , pncMaybeMempoolCapacityOverride = mempty
     , pncProtocolIdleTimeout = mempty
     , pncTimeWaitTimeout = mempty

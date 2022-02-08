@@ -167,7 +167,7 @@ data PartialNodeConfiguration
          -- Logging parameters:
        , pncLoggingSwitch  :: !(Last Bool)
        , pncLogMetrics     :: !(Last Bool)
-       , pncTraceConfig    :: !PartialTraceOptions
+       , pncTraceConfig    :: !(Last PartialTraceOptions)
 
          -- Configuration for testing purposes
        , pncMaybeMempoolCapacityOverride :: !(Last MempoolCapacityBytesOverride)
@@ -223,9 +223,9 @@ instance FromJSON PartialNodeConfiguration where
                              then do
                                partialTraceSelection <- parseJSON $ Object v
                                if useTraceDispatcher
-                               then return (PartialTraceDispatcher partialTraceSelection)
-                               else return (PartialTracingOnLegacy partialTraceSelection)
-                             else return PartialTracingOff
+                               then Last . Just <$> return (PartialTraceDispatcher partialTraceSelection)
+                               else Last . Just <$> return (PartialTracingOnLegacy partialTraceSelection)
+                             else Last . Just <$> return PartialTracingOff
 
       -- Protocol parameters
       protocol <-  v .:? "Protocol" .!= ByronProtocol
